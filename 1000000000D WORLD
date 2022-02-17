@@ -1,0 +1,46 @@
+'''
+You are in 1000000000D World!
+In 1000000000D World all vectors consist of exactly one billion integers.
+
+People of 1000000000D World are quite smart and they know that due to low entropy and "curse of dimensionality" most of their billion-dimensional vectors have a lot of consequent repetitions. So they always store their vectors in a compressed form.
+
+For example consider a vector in canonical form: 
+
+[1 1 1 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 ... (999999995 times 3)]
+
+In compressed form it will become just:
+
+[3 1 2 2 999999995 3]    (which stands for 3 times 1 and 2 times 2 and 999999995 times 3)
+
+
+Given two 1000000000D vectors A and B in compressed form.
+Find a dot product of two vectors
+
+Dot product definition:
+For two vectors a = [a_1 a_2 ... a_n] and b = [b_1 b_2 ... b_n] dot product "a • b" = a_1 * b_1 + a_2 * b_2 + ... + a_n * b_n
+'''
+#code
+a1 = input()
+b1 = input()
+A=[int(i) for i in a1.split(' ')]
+B=[int(i) for i in b1.split(' ')]
+def test(a,b):
+    if len(a)==len(b):
+        for i in range(0,len(a),2):
+            if a[i]!=b[i]:
+                return True
+                break
+        return False
+    else:
+        return True
+i=0
+while(test(A,B)):
+    if A[i]>B[i]:
+        A=A[:i]+[B[i],A[i+1]]+[A[i]-B[i]]+A[i+1:]
+    if A[i]<B[i]:
+        B=B[:i]+[A[i],B[i+1]]+[B[i]-A[i]]+B[i+1:]
+    i+=2
+s=0
+for i in range(0,len(A),2):
+    s+=(A[i+1]*B[i+1])*A[i]
+print(s)
