@@ -1,0 +1,132 @@
+""" 	Goal
+Given a grid of mine locations (where . are empty cells and x are mines), your goal is to display the grid like it appears if you win the game.
+Each position is a digit indicating the number of mines bordering it (including diagonals). The mines (x) don't appear anymore. Mines and positions that do not border any mines both appear as empty cells (.).
+Input
+Line 1 : an integer w for the width of the grid.
+Line 2 : an integer h for the height of the grid.
+Next h lines : each line of the minefield, with dots (.) or mines (x).
+Output
+h lines of width w showing the completed game of Minesweeper.
+Constraints
+1 <= w <= 30
+1 <= h <= 30
+Example 1
+Input
+16
+9
+................
+................
+................
+................
+................
+....x...........
+................
+................
+................
+Output
+................
+................
+................
+................
+...111..........
+...1.1..........
+...111..........
+................
+................
+Exemple 2
+Input 
+10
+7
+..........
+.x...x...x
+..x......x
+.....x....
+..x.x...x.
+x.........
+.x...x...x
+Output
+
+111.111.11
+1.211.1.2.
+12.1222.2.
+.2232.1122
+12.2.211.1
+.322221122
+2.1.1.1.1.
+"""
+
+#code
+w = int(input())
+h = int(input())
+tab=[[] for i in range(h)]
+for i in range(h):
+    line = input()
+    for j in line:
+        if j=='.':
+            tab[i].append(0)
+        else:
+            tab[i].append(-10)
+def check(a,b=None,c=None):
+    for i in range(w):
+        if a[i]<0 and c==None and i==0:
+            a[i+1]+=1
+            b[i]+=1
+            b[i+1]+=1
+        elif a[i]<0 and c==None and i==len(a)-1:
+            a[i-1]+=1
+            b[i]+=1
+            b[i-1]+=1
+        if a[i]<0 and c==None and i!=0 and i!=len(a)-1:
+            a[i+1]+=1
+            b[i]+=1
+            b[i+1]+=1
+            a[i-1]+=1
+            b[i-1]+=1
+        elif a[i]<0 and b==None and i==0:
+            a[i+1]+=1
+            c[i+1]+=1
+            c[i]+=1
+        elif a[i]<0 and b==None and i==len(a)-1:
+            a[i-1]+=1
+            c[i-1]+=1
+            c[i]+=1
+        elif a[i]<0 and b==None and i!=0 and i!=len(a)-1:
+            a[i+1]+=1
+            c[i+1]+=1
+            c[i]+=1
+            a[i-1]+=1
+            c[i-1]+=1
+        elif a[i]<0 and c!=None and b!=None and i==0:
+            a[i+1]+=1
+            c[i]+=1
+            b[i]+=1
+            c[i+1]+=1
+            b[i+1]+=1
+        elif a[i]<0 and b!=None and c!=None and i==len(a)-1:
+            a[i-1]+=1
+            c[i]+=1
+            b[i]+=1
+            c[i-1]+=1
+            b[i-1]+=1
+        elif a[i]<0 and i!=0 and c!=None and b!=None and i!=len(a)-1:
+            a[i+1]+=1
+            c[i]+=1
+            b[i]+=1
+            c[i+1]+=1
+            b[i+1]+=1
+            a[i-1]+=1
+            c[i-1]+=1
+            b[i-1]+=1
+    return a,b,c
+tab[0],c,tab[1]=check(tab[0],None,tab[1])
+tab[h-1],tab[h-2],c=check(tab[h-1],tab[h-2],None)
+for i in range(1,h-1):
+    tab[i],tab[i+1],tab[i-1]=check(tab[i],tab[i+1],tab[i-1])
+for i in range(h):
+    s=''
+    for j in range(w):
+        if tab[i][j]<1:
+            s+='.'
+        else:
+            s+=str(tab[i][j])
+    print(s)
